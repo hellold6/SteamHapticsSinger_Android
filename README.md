@@ -104,7 +104,23 @@ MIDI files may need to be edited with a software such as [MidiEditor](https://ww
 
 ## Compiling
 
-You will need libusb(-dev), hidapi-hidraw, and pkgconf. If you have them, just type `make`.
+### Java application build (recommended)
+
+This repository now includes a Gradle Java application project.
+
+```bash
+./gradlew clean build
+```
+
+Run it with:
+
+```bash
+./gradlew run
+```
+
+### Native build (legacy C++ binary)
+
+You will need libusb(-dev), hidapi-hidraw (or hidapi-libusb/hidapi), and pkgconf. If you have them, just type `make`.
 
 ### For a guide:
 	git clone -b master https://github.com/CrazyCritic89/SteamHapticsSinger.git

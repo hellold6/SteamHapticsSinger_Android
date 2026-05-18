@@ -5,7 +5,7 @@ package com.hellold6.steamhapticssinger;
 
 public class App {
     public String getGreeting() {
-        return "Hello World!";
+        return "Steam Haptics Singer Java application build is working.";
     }
 
     public static void main(String[] args) {
