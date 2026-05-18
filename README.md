@@ -104,18 +104,18 @@ MIDI files may need to be edited with a software such as [MidiEditor](https://ww
 
 ## Compiling
 
-### Java application build (recommended)
+### Android APK build (recommended)
 
-This repository now includes a Gradle Java application project.
+This repository now includes a Gradle Android application project.
 
 ```bash
-./gradlew clean build
+ANDROID_SDK_ROOT=/path/to/android-sdk ./gradlew clean build assembleDebugApk
 ```
 
-Run it with:
+The APK is generated at:
 
 ```bash
-./gradlew run
+app/build/outputs/apk/debug/
 ```
 
 ### Native build (legacy C++ binary)
