@@ -2,15 +2,27 @@
 #include <chrono>
 #include <cstring>
 
-#include <stdint-gcc.h>
 #include <unistd.h>
 #include <stdint.h>
 
 #include <signal.h>
 #include <stdio.h>
 
+#if __has_include(<hidapi/hidapi.h>)
+#include <hidapi/hidapi.h>
+#elif __has_include(<hidapi.h>)
 #include <hidapi.h>
+#else
+#error "hidapi header not found. Install hidapi development headers."
+#endif
+
+#if __has_include(<libusb-1.0/libusb.h>)
+#include <libusb-1.0/libusb.h>
+#elif __has_include(<libusb.h>)
 #include <libusb.h>
+#else
+#error "libusb header not found. Install libusb-1.0 development headers."
+#endif
 #include "midifile/midifile.h"
 
 #define STEAM_CONTROLLER_MAGIC_PERIOD_RATIO 495483.0
