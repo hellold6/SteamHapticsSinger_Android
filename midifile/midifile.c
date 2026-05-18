@@ -1018,7 +1018,7 @@ static void save_midi_file(MidiFile_t midi_file, MidiFileIO_t io)
  * Public API
  */
 
-MidiFile_t MidiFile_load(char *filename)
+MidiFile_t MidiFile_load(const char *filename)
 {
 	FILE *in;
 	MidiFileIO_t io;
@@ -5332,4 +5332,3 @@ int MidiFileHourMinuteSecondFrame_parse(MidiFileHourMinuteSecondFrame_t hour_min
 	sscanf(string, "%ld:%ld:%ld:%f", &(hour_minute_second_frame->hour), &(hour_minute_second_frame->minute), &(hour_minute_second_frame->second), &(hour_minute_second_frame->frame));
 	return 0;
 }
-

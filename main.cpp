@@ -302,7 +302,7 @@ void playSong(SteamControllerInfos* controller,const ParamsStruct params){
 	MidiFile_t midifile;
 
 	//Open Midi File
-	midifile = MidiFile_load(const_cast<char*>(params.midiSong));
+	midifile = MidiFile_load(params.midiSong);
 
 	if(midifile == NULL){
 		cout << "Unable to open MIDI file!" << params.midiSong << endl;
