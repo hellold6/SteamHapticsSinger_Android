@@ -487,7 +487,7 @@ int main(int argc, char** argv)
 	params.intervalUSec = DEFAULT_INTERVAL_USEC;
 	params.libusbDebugLevel = LIBUSB_LOG_LEVEL_NONE;
 	params.repeatSong = false;
-	params.midiSong = nullptr;
+	params.midiSong = "";
 	//params.leftGain = DEFAULT_GAIN;
 	//params.rightGain = DEFAULT_GAIN;
 
