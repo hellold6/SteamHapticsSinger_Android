@@ -13,7 +13,6 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: .
 
     steps:
       - name: Checkout
@@ -27,14 +26,17 @@ jobs:
           cache: gradle
 
       - name: Install native build dependencies
+        working-directory: ${{ github.workspace }}
         run: |
           sudo apt-get update
           sudo apt-get install -y pkg-config libusb-1.0-0-dev libhidapi-dev
 
       - name: Build Java application
+        working-directory: ${{ github.workspace }}
         run: |
           chmod +x ./gradlew
           ./gradlew --no-daemon clean build
 
       - name: Build native binary
+        working-directory: ${{ github.workspace }}
         run: make clean && make
