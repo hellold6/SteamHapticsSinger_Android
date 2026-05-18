@@ -40,7 +40,7 @@ double midiFrequency[128]  = {0, 8.66196, 9.17702, 9.72272, 10.3009, 10.9134, 11
 
 
 struct ParamsStruct{
-	const char* midiSong;
+	char* midiSong;
 	unsigned int intervalUSec;
 	int libusbDebugLevel;
 	bool repeatSong;
@@ -487,7 +487,7 @@ int main(int argc, char** argv)
 	params.intervalUSec = DEFAULT_INTERVAL_USEC;
 	params.libusbDebugLevel = LIBUSB_LOG_LEVEL_NONE;
 	params.repeatSong = false;
-	params.midiSong = "\0";
+	params.midiSong = nullptr;
 	//params.leftGain = DEFAULT_GAIN;
 	//params.rightGain = DEFAULT_GAIN;
 

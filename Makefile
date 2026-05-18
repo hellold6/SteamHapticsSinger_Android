@@ -9,7 +9,7 @@ $(error Could not find a hidapi pkg-config package. Tried: hidapi-hidraw, hidapi
 endif
 
 PKG_LIBS := libusb-1.0 $(HIDAPI_PKG)
-CFLAGS += -fpermissive $(shell $(PKG_CONFIG) --cflags $(PKG_LIBS))
+CFLAGS += $(shell $(PKG_CONFIG) --cflags $(PKG_LIBS))
 LDFLAGS += $(shell $(PKG_CONFIG) --libs $(PKG_LIBS))
 
 all: steam-haptics-singer
