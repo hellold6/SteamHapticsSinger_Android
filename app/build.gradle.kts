@@ -101,11 +101,11 @@ val packageReleaseApk = tasks.register<Exec>("packageReleaseApk") {
     dependsOn(packageReleaseResources, dexReleaseClasses)
     inputs.file(unsignedApk)
     inputs.file(dexOutputDir.map { it.file("classes.dex") })
-    outputs.file(unsignedApk)
     commandLine(
-        "bash",
-        "-lc",
-        "zip -qj '${unsignedApk.get().asFile.absolutePath}' '${dexOutputDir.get().file("classes.dex").asFile.absolutePath}'"
+        "zip",
+        "-qj",
+        unsignedApk.get().asFile.absolutePath,
+        dexOutputDir.get().file("classes.dex").asFile.absolutePath
     )
 }
 
