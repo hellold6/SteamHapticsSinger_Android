@@ -40,7 +40,7 @@ double midiFrequency[128]  = {0, 8.66196, 9.17702, 9.72272, 10.3009, 10.9134, 11
 
 
 struct ParamsStruct{
-	char* midiSong;
+	const char* midiSong;
 	unsigned int intervalUSec;
 	int libusbDebugLevel;
 	bool repeatSong;
@@ -302,7 +302,7 @@ void playSong(SteamControllerInfos* controller,const ParamsStruct params){
 	MidiFile_t midifile;
 
 	//Open Midi File
-	midifile = MidiFile_load(params.midiSong);
+	midifile = MidiFile_load(const_cast<char*>(params.midiSong));
 
 	if(midifile == NULL){
 		cout << "Unable to open MIDI file!" << params.midiSong << endl;
