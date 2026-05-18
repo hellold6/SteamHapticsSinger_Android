@@ -61,7 +61,7 @@ val debugApk = apkOutputDir.map { it.file("SteamHapticsSinger-debug.apk") }
 val debugKeystore = apkWorkDir.map { it.file("debug.keystore") }
 val jarFile = tasks.named<Jar>("jar").flatMap { it.archiveFile }
 
-val packageReleaseResources = tasks.register<Exec>("packageReleaseResources") {
+val packageDebugResources = tasks.register<Exec>("packageDebugResources") {
     dependsOn(tasks.named("classes"))
     inputs.file(manifestFile)
     outputs.file(unsignedApk)
@@ -80,7 +80,7 @@ val packageReleaseResources = tasks.register<Exec>("packageReleaseResources") {
     )
 }
 
-val dexReleaseClasses = tasks.register<Exec>("dexReleaseClasses") {
+val dexDebugClasses = tasks.register<Exec>("dexDebugClasses") {
     dependsOn(tasks.named("jar"))
     inputs.file(jarFile)
     outputs.dir(dexOutputDir)
@@ -97,8 +97,8 @@ val dexReleaseClasses = tasks.register<Exec>("dexReleaseClasses") {
     )
 }
 
-val packageReleaseApk = tasks.register<Exec>("packageReleaseApk") {
-    dependsOn(packageReleaseResources, dexReleaseClasses)
+val packageDebugApk = tasks.register<Exec>("packageDebugApk") {
+    dependsOn(packageDebugResources, dexDebugClasses)
     inputs.file(unsignedApk)
     inputs.file(dexOutputDir.map { it.file("classes.dex") })
     commandLine(
@@ -139,8 +139,8 @@ val generateDebugKeystore = tasks.register<Exec>("generateDebugKeystore") {
     )
 }
 
-val zipalignReleaseApk = tasks.register<Exec>("zipalignReleaseApk") {
-    dependsOn(packageReleaseApk)
+val zipalignDebugApk = tasks.register<Exec>("zipalignDebugApk") {
+    dependsOn(packageDebugApk)
     inputs.file(unsignedApk)
     outputs.file(alignedApk)
     doFirst {
@@ -156,7 +156,7 @@ val zipalignReleaseApk = tasks.register<Exec>("zipalignReleaseApk") {
 }
 
 tasks.register<Exec>("assembleDebugApk") {
-    dependsOn(zipalignReleaseApk, generateDebugKeystore)
+    dependsOn(zipalignDebugApk, generateDebugKeystore)
     inputs.file(alignedApk)
     inputs.file(debugKeystore)
     outputs.file(debugApk)
