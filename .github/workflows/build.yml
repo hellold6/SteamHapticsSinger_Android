@@ -1,0 +1,41 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Install native build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkg-config libusb-1.0-0-dev libhidapi-dev
+
+      - name: Build Java application
+        run: |
+          chmod +x ./gradlew
+          ./gradlew --no-daemon clean build
+
+      - name: Build native binary
+        run: |
+          make clean
+          make
