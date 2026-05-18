@@ -12,8 +12,8 @@ repositories {
 val compileSdk = 36
 val androidSdkRoot = providers.environmentVariable("ANDROID_SDK_ROOT")
     .orElse(providers.environmentVariable("ANDROID_HOME"))
-    .orElse("/usr/local/lib/android/sdk")
-    .get()
+    .orNull
+    ?: error("Set ANDROID_SDK_ROOT or ANDROID_HOME to the Android SDK path before running Gradle.")
 val androidJar = file("$androidSdkRoot/platforms/android-$compileSdk/android.jar")
 require(androidJar.exists()) { "Android platform jar not found at ${androidJar.absolutePath}" }
 
@@ -55,8 +55,8 @@ val manifestFile = layout.projectDirectory.file("src/main/AndroidManifest.xml")
 val apkWorkDir = layout.buildDirectory.dir("intermediates/apk/debug")
 val apkOutputDir = layout.buildDirectory.dir("outputs/apk/debug")
 val dexOutputDir = apkWorkDir.map { it.dir("dex") }
-val unsignedApk = apkWorkDir.map { it.file("app-release-unsigned.apk") }
-val alignedApk = apkWorkDir.map { it.file("app-release-aligned.apk") }
+val unsignedApk = apkWorkDir.map { it.file("app-debug-unsigned.apk") }
+val alignedApk = apkWorkDir.map { it.file("app-debug-aligned.apk") }
 val debugApk = apkOutputDir.map { it.file("SteamHapticsSinger-debug.apk") }
 val debugKeystore = apkWorkDir.map { it.file("debug.keystore") }
 val jarFile = tasks.named<Jar>("jar").flatMap { it.archiveFile }
