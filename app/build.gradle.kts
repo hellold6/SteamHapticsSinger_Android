@@ -52,12 +52,12 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 val manifestFile = layout.projectDirectory.file("src/main/AndroidManifest.xml")
-val apkWorkDir = layout.buildDirectory.dir("intermediates/apk/release")
-val apkOutputDir = layout.buildDirectory.dir("outputs/apk/release")
+val apkWorkDir = layout.buildDirectory.dir("intermediates/apk/debug")
+val apkOutputDir = layout.buildDirectory.dir("outputs/apk/debug")
 val dexOutputDir = apkWorkDir.map { it.dir("dex") }
 val unsignedApk = apkWorkDir.map { it.file("app-release-unsigned.apk") }
 val alignedApk = apkWorkDir.map { it.file("app-release-aligned.apk") }
-val releaseApk = apkOutputDir.map { it.file("SteamHapticsSinger-release.apk") }
+val debugApk = apkOutputDir.map { it.file("SteamHapticsSinger-debug.apk") }
 val debugKeystore = apkWorkDir.map { it.file("debug.keystore") }
 val jarFile = tasks.named<Jar>("jar").flatMap { it.archiveFile }
 
@@ -155,11 +155,11 @@ val zipalignReleaseApk = tasks.register<Exec>("zipalignReleaseApk") {
     )
 }
 
-tasks.register<Exec>("assembleRelease") {
+tasks.register<Exec>("assembleDebugApk") {
     dependsOn(zipalignReleaseApk, generateDebugKeystore)
     inputs.file(alignedApk)
     inputs.file(debugKeystore)
-    outputs.file(releaseApk)
+    outputs.file(debugApk)
     doFirst {
         apkOutputDir.get().asFile.mkdirs()
     }
@@ -175,11 +175,11 @@ tasks.register<Exec>("assembleRelease") {
         "--key-pass",
         "pass:android",
         "--out",
-        releaseApk.get().asFile.absolutePath,
+        debugApk.get().asFile.absolutePath,
         alignedApk.get().asFile.absolutePath
     )
 }
 
 tasks.named("build") {
-    dependsOn("assembleRelease")
+    dependsOn("assembleDebugApk")
 }

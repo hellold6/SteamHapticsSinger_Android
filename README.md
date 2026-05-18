@@ -109,13 +109,13 @@ MIDI files may need to be edited with a software such as [MidiEditor](https://ww
 This repository now includes a Gradle Android application project.
 
 ```bash
-./gradlew clean build assembleRelease
+./gradlew clean build assembleDebugApk
 ```
 
 The APK is generated at:
 
 ```bash
-app/build/outputs/apk/release/
+app/build/outputs/apk/debug/
 ```
 
 ### Native build (legacy C++ binary)
