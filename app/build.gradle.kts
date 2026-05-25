@@ -22,12 +22,19 @@ val buildToolsDir = file("$androidSdkRoot/build-tools").listFiles()
     ?.maxByOrNull(File::getName)
     ?: error("No Android build-tools found under $androidSdkRoot/build-tools")
 
-val aapt2 = file("${buildToolsDir.absolutePath}/aapt2")
-val d8 = file("${buildToolsDir.absolutePath}/d8")
-val zipalign = file("${buildToolsDir.absolutePath}/zipalign")
-val apksigner = file("${buildToolsDir.absolutePath}/apksigner")
+val isWindows = System.getProperty("os.name").startsWith("Windows", ignoreCase = true)
+val executableSuffix = if (isWindows) ".exe" else ""
+val batchSuffix = if (isWindows) ".bat" else ""
+val javaHome = providers.environmentVariable("JAVA_HOME").orNull
+    ?: error("Set JAVA_HOME to a JDK 17 installation before running Gradle.")
+val aapt2 = file("${buildToolsDir.absolutePath}/aapt2$executableSuffix")
+val d8 = file("${buildToolsDir.absolutePath}/d8$batchSuffix")
+val zipalign = file("${buildToolsDir.absolutePath}/zipalign$executableSuffix")
+val apksigner = file("${buildToolsDir.absolutePath}/apksigner$batchSuffix")
+val keytool = file("$javaHome/bin/keytool$executableSuffix")
+val jarTool = file("$javaHome/bin/jar$executableSuffix")
 
-listOf(aapt2, d8, zipalign, apksigner).forEach {
+listOf(aapt2, d8, zipalign, apksigner, keytool, jarTool).forEach {
     require(it.exists()) { "Required Android build tool not found at ${it.absolutePath}" }
 }
 
@@ -102,10 +109,12 @@ val packageDebugApk = tasks.register<Exec>("packageDebugApk") {
     inputs.file(unsignedApk)
     inputs.file(dexOutputDir.map { it.file("classes.dex") })
     commandLine(
-        "zip",
-        "-qj",
+        jarTool.absolutePath,
+        "uf",
         unsignedApk.get().asFile.absolutePath,
-        dexOutputDir.get().file("classes.dex").asFile.absolutePath
+        "-C",
+        dexOutputDir.get().asFile.absolutePath,
+        "classes.dex"
     )
 }
 
@@ -116,7 +125,7 @@ val generateDebugKeystore = tasks.register<Exec>("generateDebugKeystore") {
         apkWorkDir.get().asFile.mkdirs()
     }
     commandLine(
-        "keytool",
+        keytool.absolutePath,
         "-genkeypair",
         "-storetype",
         "PKCS12",
